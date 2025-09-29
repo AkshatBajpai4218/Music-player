@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Sargam</title>
+    <link rel="stylesheet" href="account.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        
+        // Your Firebase configuration will be set up in account.js
+        window.firebaseModules = { initializeApp, getAuth };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-music"></i>
+                    <span>Sargam</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="results.html" class="nav-link">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="account-container">
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="account-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <h1>Welcome to Music Player</h1>
+                        <p>Sign in to access your personalized music experience</p>
+                    </div>
+
+                    <div class="auth-section">
+                        <!-- Firebase Setup Notice -->
+                        <div class="firebase-setup-notice" id="firebaseSetupNotice">
+                            <div class="notice-content">
+                                <i class="fas fa-info-circle"></i>
+                                <div>
+                                    <h4>Firebase Setup Required</h4>
+                                    <p>To enable authentication, you need to configure your Firebase project.</p>
+                                    <button class="setup-btn" onclick="showFirebaseSetupInstructions()">
+                                        <i class="fas fa-cog"></i> Setup Instructions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Firebase Auth Buttons (Hidden until configured) -->
+                        <div class="firebase-auth-section" id="firebaseAuthSection" style="display: none;">
+                            <button class="firebase-btn google-btn" id="googleSignInBtn">
+                                <i class="fab fa-google"></i>
+                                Continue with Google
+                            </button>
+                            
+                            <div class="divider">
+                                <span>or sign in with email</span>
+                            </div>
+                        </div>
+
+                        <!-- Email Sign-In Form -->
+                        <form class="auth-form" id="authForm">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                            </div>
+                            <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                            </div>
+                            <button type="submit" class="auth-btn" id="authBtn">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span id="authBtnText">Sign In</span>
+                            </button>
+                        </form>
+
+                        <div class="auth-links">
+                            <a href="#" class="auth-link" id="forgotPasswordLink">Forgot Password?</a>
+                            <span>•</span>
+                            <a href="#" class="auth-link" id="toggleAuthMode">Create Account</a>
+                        </div>
+                    </div>
+
+                    <!-- User Profile (Hidden initially) -->
+                    <div class="user-profile" id="userProfile" style="display: none;">
+                        <div class="profile-avatar">
+                            <img id="userAvatar" src="" alt="User Avatar">
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="userName"></h2>
+                            <p id="userEmail"></p>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="profile-btn" onclick="goToHome()">
+                                <i class="fas fa-home"></i>
+                                Go to Music
+                            </button>
+                            <button class="profile-btn secondary" onclick="signOutUser()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Section -->
+                <div class="features-section">
+                    <h2>Why Join Sargam?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <h3>Unlimited Music</h3>
+                            <p>Access millions of songs from around the world</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Personalized Playlists</h3>
+                            <p>Create and save your favorite song collections</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h3>Offline Listening</h3>
+                            <p>Download songs to enjoy music anywhere</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Cross-Platform</h3>
+                            <p>Sync your music across all your devices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Firebase Setup Instructions Modal -->
+        <div class="modal" id="firebaseSetupModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Firebase Authentication Setup</h2>
+                    <button class="close-btn" onclick="closeFirebaseSetupModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="setup-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Create Firebase Project</h3>
+                                <p>Go to <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and create a new project.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Add Web App</h3>
+                                <p>In your Firebase project, click "Add app" and select the web platform (</>) icon.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Enable Authentication</h3>
+                                <p>Go to "Authentication" → "Sign-in method" and enable:</p>
+                                <ul>
+                                    <li>Email/Password</li>
+                                    <li>Google (optional)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3>Configure Authorized Domains</h3>
+                                <p>In Authentication → Settings → Authorized domains, add:</p>
+                                <div class="code-block">
+                                    <code>localhost</code> (for local development)<br>
+                                    <code>yourdomain.com</code> (for production)
+                                </div>
+                                <p><strong>Current domain:</strong> <span id="currentDomain"></span></p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3>Firebase Config</h3>
+                                <p><strong>✅ Configuration is already updated!</strong></p>
+                                <p>Your Firebase project "sargam-93a31" is configured and ready to use.</p>
+                                <div class="code-block">
+                                    <code>Project ID: sargam-93a31<br>
+                                    Auth Domain: sargam-93a31.firebaseapp.com</code>
+                                </div>
+                                <p>You can now create accounts and sign in with email/password or Google.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-secondary" onclick="skipFirebaseSetup()">Skip for Now</button>
+                        <button class="btn-primary" onclick="closeFirebaseSetupModal()">Got It!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 Music Player. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script type="module" src="account.js"></script>
+</body>
+</html>

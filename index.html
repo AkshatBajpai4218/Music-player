@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sargam - Music Player</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Header with Search -->
+  <header class="top-header">
+    <div class="header-left">
+      <button class="menu-btn" id="menuToggle">☰</button>
+      <h1>🎵 Sargam</h1>
+    </div>
+    
+    <div class="search-container">
+      <div class="search-wrapper">
+        <input type="text" id="topSearch" placeholder="Search songs, albums, artists...">
+        <button id="topSearchBtn">🔍</button>
+      </div>
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+    
+    <div class="header-right">
+      <div class="user-info" id="userInfo" style="display: none;">
+        <img id="userAvatar" src="" alt="User" class="user-avatar">
+        <span id="userName" class="user-name"></span>
+      </div>
+      <button class="profile-btn" onclick="window.location.href='account.html'" title="Account">👤</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="nav-menu">
+        <ul>
+          <li class="nav-item active" data-page="home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">Home</span>
+          </li>
+          <li class="nav-item" data-page="library">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Your Library</span>
+          </li>
+          <li class="nav-item" data-page="playlist">
+            <span class="nav-icon">🎵</span>
+            <span class="nav-text">My Playlist</span>
+          </li>
+          <li class="nav-item" onclick="window.location.href='account.html'">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Account</span>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- Local Upload -->
+      <div class="upload-section">
+        <input type="file" id="fileUpload" accept="audio/*" multiple>
+        <label for="fileUpload" class="upload-btn">
+          <span class="upload-icon">📁</span>
+          <span class="upload-text">Upload Local Files</span>
+        </label>
+      </div>
+      
+      <div class="library-section">
+        <h3 class="library-title">Your Library</h3>
+        <ul id="library"></ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Home Page -->
+      <div id="homePage" class="page active">
+        <h2>Good evening</h2>
+        <div class="trending-sections">
+          <section class="category-section">
+            <div class="section-header">
+              <h3>Hindi Songs</h3>
+              <button class="show-all-btn" data-category="hindi">Show all</button>
+            </div>
+            <div class="songs-grid" id="hindiSongs"></div>
+          </section>
+          
+          <section class="category-section">
+            <div class="section-header">
+              <h3>English Songs</h3>
+              <button class="show-all-btn" data-category="english">Show all</button>
+            </div>
+            <div class="songs-grid" id="englishSongs"></div>
+          </section>
+          
+          <section class="category-section">
+            <div class="section-header">
+              <h3>1990s Hits</h3>
+              <button class="show-all-btn" data-category="1990s">Show all</button>
+            </div>
+            <div class="songs-grid" id="songs1990s"></div>
+          </section>
+          
+          <section class="category-section">
+            <div class="section-header">
+              <h3>2000s Hits</h3>
+              <button class="show-all-btn" data-category="2000s">Show all</button>
+            </div>
+            <div class="songs-grid" id="songs2000s"></div>
+          </section>
+          
+          <section class="category-section">
+            <div class="section-header">
+              <h3>Love Songs</h3>
+              <button class="show-all-btn" data-category="love">Show all</button>
+            </div>
+            <div class="songs-grid" id="loveSongs"></div>
+          </section>
+          
+          <section class="category-section">
+            <div class="section-header">
+              <h3>Lofi Songs</h3>
+              <button class="show-all-btn" data-category="lofi">Show all</button>
+            </div>
+            <div class="songs-grid" id="lofiSongs"></div>
+          </section>
+        </div>
+      </div>
+      
+      <!-- Library Page -->
+      <div id="libraryPage" class="page">
+        <h2>Your Library</h2>
+        
+        <!-- Custom Playlists in Library -->
+        <div class="library-playlists-section">
+          <h3>Your Playlists</h3>
+          <div id="libraryPlaylists" class="library-playlists-grid"></div>
+        </div>
+        
+        <!-- Uploaded Songs -->
+        <div class="library-songs-section">
+          <h3>Uploaded Songs</h3>
+          <div class="library-content" id="libraryContent">
+            <p>Your uploaded songs will appear here</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Playlist Page -->
+      <div id="playlistPage" class="page">
+        <div class="playlist-header">
+          <h2>My Playlists</h2>
+          <div class="playlist-header-actions">
+            <button class="go-online-btn" id="goOnlineBtn" title="Force Firebase Online" style="display: none;">🌐</button>
+            <button class="sync-playlists-btn" id="syncPlaylistsBtn" title="Sync to Cloud" style="display: none;">☁️</button>
+            <button class="refresh-playlists-btn" id="refreshPlaylistsBtn" title="Refresh Playlists">🔄</button>
+            <button class="create-playlist-btn" id="createPlaylistBtn">➕ Create New Playlist</button>
+          </div>
+        </div>
+        
+        <!-- Custom Playlists Section -->
+        <div class="custom-playlists-section">
+          <h3>Your Playlists</h3>
+          <div id="playlistStatus" class="playlist-status" style="display: none;">
+            <div class="status-indicator">
+              <div class="loading-spinner"></div>
+              <span class="status-text">Loading playlists...</span>
+            </div>
+          </div>
+          <div id="customPlaylists" class="playlists-grid"></div>
+        </div>
+        
+        <!-- Current Queue Section -->
+        <div class="current-queue-section">
+          <h3>Current Queue</h3>
+          <div class="playlist" id="playlist"></div>
+        </div>
+      </div>
+      
+      <!-- Search Results Page -->
+      <div id="searchPage" class="page">
+        <div class="search-results-container">
+          <div class="search-results-header">
+            <h1 id="searchResultsTitle">Search Results</h1>
+            <p id="searchResultsSubtitle">Find your favorite music</p>
+            <div class="search-stats">
+              <span id="searchResultsCount">0 results found</span>
+            </div>
+            <div class="debug-controls" style="margin-top: 15px;">
+              <button onclick="testSearch()" class="debug-btn">🧪 Test Search Function</button>
+              <button onclick="diagnoseProblem()" class="debug-btn">🔧 Run Diagnostics</button>
+              <button onclick="resetSearchButton()" class="debug-btn">🔄 Reset Search Button</button>
+              <button onclick="console.clear()" class="debug-btn">🗑️ Clear Console</button>
+            </div>
+          </div>
+          
+          <div class="search-filters">
+            <button class="filter-btn active" onclick="filterResults('all')">All</button>
+            <button class="filter-btn" onclick="filterResults('songs')">Songs</button>
+            <button class="filter-btn" onclick="filterResults('artists')">Artists</button>
+            <button class="filter-btn" onclick="filterResults('albums')">Albums</button>
+          </div>
+          
+          <div class="search-results-content">
+            <div id="searchResults" class="search-results-grid">
+              <div class="no-results">
+                <div class="no-results-icon">🔍</div>
+                <h3>Start your search</h3>
+                <p>Use the search bar above to find songs, artists, and albums</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Category Modal -->
+  <div id="categoryModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Category Songs</h2>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-songs-grid" id="modalSongsGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Playlist Modal -->
+  <div id="createPlaylistModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Playlist</h2>
+        <button class="close-modal" id="closeCreatePlaylistModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="playlistName">Playlist Name:</label>
+          <input type="text" id="playlistName" placeholder="Enter playlist name..." maxlength="50">
+        </div>
+        <div class="form-group">
+          <label for="playlistDescription">Description (optional):</label>
+          <textarea id="playlistDescription" placeholder="Describe your playlist..." maxlength="200" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="cancelCreatePlaylist">Cancel</button>
+          <button class="btn-primary" id="confirmCreatePlaylist">Create Playlist</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add to Playlist Modal -->
+  <div id="addToPlaylistModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add to Playlist</h2>
+        <button class="close-modal" id="closeAddToPlaylistModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="playlist-selection">
+          <h3>Select Playlist:</h3>
+          <div id="playlistSelectionList" class="playlist-selection-list"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="cancelAddToPlaylist">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Playlist Detail Modal -->
+  <div id="playlistDetailModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="playlistDetailTitle">Playlist</h2>
+        <button class="close-modal" id="closePlaylistDetailModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="playlist-detail-info">
+          <div class="playlist-detail-cover">🎵</div>
+          <div class="playlist-detail-meta">
+            <h3 id="playlistDetailName">Playlist Name</h3>
+            <p id="playlistDetailDescription">Playlist description</p>
+            <p id="playlistDetailStats">0 songs</p>
+          </div>
+          <div class="playlist-detail-actions">
+            <button class="btn-primary" id="playPlaylistBtn">▶️ Play</button>
+            <button class="btn-secondary" id="editPlaylistBtn">✏️ Edit</button>
+            <button class="btn-danger" id="deletePlaylistBtn">🗑️ Delete</button>
+          </div>
+        </div>
+        <div class="playlist-songs-list" id="playlistSongsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div id="contextMenu" class="context-menu">
+    <div class="context-menu-item" id="addToPlaylistOption">
+      <span class="context-icon">➕</span>
+      <span>Add to Playlist</span>
+    </div>
+    <div class="context-menu-item" id="playNowOption">
+      <span class="context-icon">▶️</span>
+      <span>Play Now</span>
+    </div>
+  </div>
+
+  <!-- Playlist Song Context Menu -->
+  <div id="playlistSongContextMenu" class="context-menu">
+    <div class="context-menu-item" id="removeSongOption">
+      <span class="context-icon">🗑️</span>
+      <span>Remove from Playlist</span>
+    </div>
+    <div class="context-menu-item" id="playSongOption">
+      <span class="context-icon">▶️</span>
+      <span>Play Now</span>
+    </div>
+  </div>
+
+  <!-- Bottom Player Controls -->
+  <div class="player">
+    <div class="song-info">
+      <img id="cover" src="images/default.jpg" alt="cover">
+      <div>
+        <h4 id="title">Song Title</h4>
+        <p id="artist">Artist</p>
+      </div>
+    </div>
+    
+    <audio id="audio"></audio>
+
+    <div class="controls">
+      <button id="prev">⏮️</button>
+      <button id="play">▶️</button>
+      <button id="next">⏭️</button>
+    </div>
+
+    <div class="progress-container">
+      <input type="range" id="progress" value="0" min="0" max="100">
+      <span id="current">0:00</span> / <span id="duration">0:00</span>
+    </div>
+
+    <div class="volume">
+      🔊 <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+    </div>
+  </div>
+
+  <script src="audioPlayerManager.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

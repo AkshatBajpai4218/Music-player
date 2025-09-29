@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results - Sargam</title>
+  <link rel="stylesheet" href="results.css">
+</head>
+<body>
+  <!-- Top Header -->
+  <header class="top-header">
+    <div class="logo">
+      <h1>🎵 Sargam</h1>
+    </div>
+    
+    <div class="search-container">
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Search songs, albums, artists...">
+        <button id="searchBtn">🔍</button>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+    
+    <div class="header-actions">
+      <button onclick="window.location.href='index.html'" class="home-btn">🏠 Home</button>
+      <button onclick="window.location.href='account.html'" class="account-btn">👤 Account</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <main class="main-content">
+      <!-- Search Results Header -->
+      <div class="results-header">
+        <h1 id="resultsTitle">Search Results</h1>
+        <p id="resultsSubtitle">Start typing to search for music</p>
+        <div class="search-stats">
+          <span id="resultsCount">0 results</span>
+        </div>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-section">
+        <button class="filter-btn active" onclick="filterResults('all')">All</button>
+        <button class="filter-btn" onclick="filterResults('songs')">Songs</button>
+        <button class="filter-btn" onclick="filterResults('artists')">Artists</button>
+        <button class="filter-btn" onclick="filterResults('albums')">Albums</button>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="results-container">
+        <div id="resultsGrid" class="songs-grid">
+          <!-- Initial state -->
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>Start your search</h3>
+            <p>Use the search bar above to find your favorite music</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  </div>
+
+  <!-- Bottom Player Controls (Same as home page) -->
+  <div class="player">
+    <div class="song-info">
+      <img id="cover" src="images/default.jpg" alt="cover">
+      <div>
+        <h4 id="title">Song Title</h4>
+        <p id="artist">Artist</p>
+      </div>
+    </div>
+    
+    <audio id="audio"></audio>
+
+    <div class="controls">
+      <button id="prev">⏮️</button>
+      <button id="play">▶️</button>
+      <button id="next">⏭️</button>
+    </div>
+
+    <div class="progress-container">
+      <input type="range" id="progress" value="0" min="0" max="100">
+      <span id="current">0:00</span> / <span id="duration">0:00</span>
+    </div>
+
+    <div class="volume">
+      🔊 <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+    </div>
+  </div>
+
+  <script src="audioPlayerManager.js"></script>
+  <script src="results.js"></script>
+</body>
+</html>
