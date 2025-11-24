@@ -5,14 +5,16 @@ import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase
 import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // Your web app's Firebase configuration
+// TODO: Replace with your own Firebase configuration
+// Get your config from: https://console.firebase.google.com/
 const firebaseConfig = {
-    apiKey: "AIzaSyCK5J9-5_20VRgfaZLKIenv_dWL09gix3o",
-    authDomain: "sargam-93a31.firebaseapp.com",
-    projectId: "sargam-93a31",
-    storageBucket: "sargam-93a31.firebasestorage.app",
-    messagingSenderId: "1030223620895",
-    appId: "1:1030223620895:web:03ecbeeaefbb8d05355e2a",
-    measurementId: "G-THYZXG9LS0"
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    measurementId: "YOUR_MEASUREMENT_ID"
 };
 
 // Initialize Firebase
